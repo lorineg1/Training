@@ -1,8 +1,9 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from .models import Product, Category
 from rest_framework import status
 from rest_framework.decorators import api_view
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from .serializers import ProductSerializer
 
@@ -37,6 +38,22 @@ def snippet_list(request):
         return Response(serializer.data)
     
     elif request.method == 'POST':
+        product = ProductSerializer(data=request.data)
+        if product.is_valid():
+            product.save()
+            return Response(product.data, status=status.HTTP_201_CREATED)
+        return Response(product.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ProductAPI(APIView):
+    def get(self, request):
+        products = Product.objects.all()
+        serializer = ProductSerializer(products, many=True)
+        return JsonResponse({
+            "products": serializer.data
+        }, safe = False)
+    
+    def post(self, request):
         product = ProductSerializer(data=request.data)
         if product.is_valid():
             product.save()

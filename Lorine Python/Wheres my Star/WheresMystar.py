@@ -8,6 +8,6 @@ if name == "q" or "Q":
     sys.exit(0)
 
 for files in "C:\Users\omega\Documents\Training\Lorine Python\IndexMe": #to go through all files in folder
-    if name == files.decode("utf-8"): # if found actor nam efrom user index
+    if name == files.decode("utf-8"): # if found actor name from user index
         with open(f'{name}.txt', 'w') as f: # write into new file using the name of the actor
             f.write(files)
